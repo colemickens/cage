@@ -32,6 +32,23 @@
 #include "view.h"
 
 void
+cage_output_surface_at(struct cg_output *output, double lx, double ly, struct wlr_surface **surface, double *sx,
+		       double *sy)
+{
+	struct cg_view *view;
+	wl_list_for_each (view, &output->views, link) {
+		double _sx, _sy;
+		struct wlr_surface *_surface = view_wlr_surface_at(view, lx, ly, &_sx, &_sy);
+		if (_surface != NULL) {
+			*sx = _sx;
+			*sy = _sy;
+			*surface = _surface;
+			break;
+		}
+	}
+}
+
+void
 cage_output_damage_whole(struct cg_output *output)
 {
 	assert(output != NULL);
